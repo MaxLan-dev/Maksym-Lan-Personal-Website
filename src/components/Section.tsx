@@ -9,10 +9,18 @@ export function PageWrapper({ children }: { children: ReactNode }) {
   );
 }
 
-export function Section({ children, className }: { children: ReactNode; className?: string }) {
+export function Section({
+  children,
+  className,
+  fullWidth = false,
+}: {
+  children: ReactNode;
+  className?: string;
+  fullWidth?: boolean;
+}) {
   return (
     <section className={cn("py-12 sm:py-20 px-4 sm:px-8 lg:px-12", className)}>
-      <div className="max-w-5xl mx-auto">{children}</div>
+      <div className={cn(!fullWidth && "max-w-5xl mx-auto")}>{children}</div>
     </section>
   );
 }

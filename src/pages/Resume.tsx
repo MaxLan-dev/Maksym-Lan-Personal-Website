@@ -9,8 +9,8 @@ export default function Resume() {
 
   return (
     <PageWrapper>
-      <div className={fullScreen ? "fixed inset-0 z-50 bg-background p-4 lg:pl-[70px]" : ""}>
-        <Section className={fullScreen ? "py-0 h-full flex flex-col" : ""}>
+      <div className={fullScreen ? "fixed inset-0 z-50 bg-background" : ""}>
+        <Section fullWidth={fullScreen} className={fullScreen ? "py-0 h-full flex flex-col" : ""}>
           {!fullScreen && <SectionLabel>Resume</SectionLabel>}
 
           <FadeIn>
@@ -40,11 +40,14 @@ export default function Resume() {
           </FadeIn>
 
           <div
-            className="border border-border overflow-hidden flex-1"
-            style={{ height: fullScreen ? "calc(100% - 60px)" : "75vh" }}
+            className="border border-border overflow-hidden"
+            style={{
+              width: fullScreen ? "100vw" : "100%",
+              height: fullScreen ? "100vh" : "75vh",
+            }}
           >
             <iframe
-              src={profile.resumeUrl}
+              src={`${profile.resumeUrl}#zoom=page-width`}
               className="w-full h-full"
               title="Resume"
             />
