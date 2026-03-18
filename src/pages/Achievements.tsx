@@ -1,85 +1,182 @@
+import { useState } from "react";
 import { achievements } from "@/data/achievements";
-import { FadeIn, StaggerContainer, StaggerItem } from "@/components/Motion";
-import { PageWrapper, Section, SectionLabel } from "@/components/Section";
+import { motion, AnimatePresence } from "framer-motion";
+import { PageWrapper } from "@/components/Section";
+
+// Extract year from description
+function getYear(desc: string): string {
+  const match = desc.match(/(\d{4})/);
+  return match ? match[1] : "Other";
+}
+
+// Group by year descending
+function groupByYear() {
+  const map = new Map<string, typeof achievements>();
+  achievements.forEach((a) => {
+    const year = getYear(a.description);
+    if (!map.has(year)) map.set(year, []);
+    map.get(year)!.push(a);
+  });
+  return [...map.entries()].sort((a, b) => Number(b[0]) - Number(a[0]));
+}
 
 export default function Achievements() {
-  // Group achievements by type
-  const wins = achievements.filter(a => a.icon === '🥇' || a.icon === '🥈' || a.icon === '🥉');
-  const honors = achievements.filter(a => a.title.includes("Dean"));
-  const others = achievements.filter(a => !wins.includes(a) && !honors.includes(a));
+  const grouped = groupByYear();
+  const years = grouped.map(([y]) => y);
+  const [activeYear, setActiveYear] = useState<string | null>(null);
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+
+  const displayed = activeYear ? grouped.filter(([y]) => y === activeYear) : grouped;
+  const totalCount = achievements.length;
 
   return (
     <PageWrapper>
-      <Section>
-        <SectionLabel>Achievements</SectionLabel>
-        <FadeIn>
-          <h1 className="text-4xl sm:text-5xl font-bold tracking-tighter text-foreground mb-2">
-            {achievements.length} <span className="font-serif italic font-normal text-primary">recognitions</span>
-          </h1>
-          <p className="text-sm text-muted-foreground mb-12">Awards, competitions, and honors from 2017 to present</p>
-        </FadeIn>
+      <div className="min-h-screen px-4 sm:px-8 lg:px-12 py-12 sm:py-20">
+        <div className="max-w-5xl mx-auto">
 
-        {/* Podium wins — featured */}
-        <div className="mb-12">
-          <FadeIn>
-            <h2 className="font-mono text-xs text-primary uppercase tracking-widest mb-4">Competition Wins</h2>
-          </FadeIn>
-          <StaggerContainer className="grid sm:grid-cols-2 gap-px bg-border border border-border">
-            {wins.map((a, i) => (
-              <StaggerItem key={i}>
-                <div className="bg-background p-5 hover:bg-card transition-colors h-full">
-                  <div className="flex items-start gap-3">
-                    <span className="text-2xl shrink-0">{a.icon}</span>
-                    <div>
-                      <h3 className="font-semibold text-foreground text-sm leading-tight">{a.title}</h3>
-                      <p className="text-xs text-muted-foreground mt-1.5">{a.description}</p>
-                    </div>
+          {/* Oversized header */}
+          <div className="mb-16 relative">
+            <div className="font-mono text-[10px] text-muted-foreground tracking-[0.4em] uppercase mb-4">
+              // ACHIEVEMENTS.LOG
+            </div>
+            <h1 className="text-6xl sm:text-8xl lg:text-[10rem] font-bold tracking-tighter text-foreground leading-[0.85] select-none">
+              {totalCount}
+            </h1>
+            <div className="absolute top-12 sm:top-16 left-20 sm:left-32 lg:left-48">
+              <span className="font-serif italic text-2xl sm:text-4xl text-primary">awards &</span>
+              <br />
+              <span className="font-serif italic text-2xl sm:text-4xl text-primary">honors</span>
+            </div>
+          </div>
+
+          {/* Year selector — horizontal ticker */}
+          <div className="flex items-center gap-1 mb-12 overflow-x-auto pb-2">
+            <button
+              onClick={() => setActiveYear(null)}
+              className={`px-4 py-2 font-mono text-xs tracking-wider transition-all shrink-0 ${
+                !activeYear
+                  ? "bg-foreground text-background font-bold"
+                  : "text-muted-foreground hover:text-foreground border border-border"
+              }`}
+            >
+              ALL ({totalCount})
+            </button>
+            {years.map((year) => {
+              const count = grouped.find(([y]) => y === year)?.[1].length ?? 0;
+              return (
+                <button
+                  key={year}
+                  onClick={() => setActiveYear(activeYear === year ? null : year)}
+                  className={`px-4 py-2 font-mono text-xs tracking-wider transition-all shrink-0 ${
+                    activeYear === year
+                      ? "bg-primary text-primary-foreground font-bold"
+                      : "text-muted-foreground hover:text-foreground border border-border"
+                  }`}
+                >
+                  {year} ({count})
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Achievements — stacked newspaper columns */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeYear ?? "all"}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.25 }}
+            >
+              {displayed.map(([year, items]) => (
+                <div key={year} className="mb-14">
+                  {/* Year divider */}
+                  <div className="flex items-center gap-4 mb-6">
+                    <span className="text-5xl sm:text-6xl font-bold font-mono text-foreground/10 select-none">{year}</span>
+                    <div className="flex-1 h-px bg-border" />
+                    <span className="font-mono text-[10px] text-muted-foreground">{items.length} ITEM{items.length > 1 ? "S" : ""}</span>
+                  </div>
+
+                  {/* Masonry-like asymmetric grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
+                    {items.map((a, i) => {
+                      // Alternate sizing for visual interest
+                      const isWin = a.icon === '🥇';
+                      const isMedal = ['🥇', '🥈', '🥉'].includes(a.icon);
+                      const span = isWin ? "sm:col-span-8" : isMedal ? "sm:col-span-6" : i % 3 === 0 ? "sm:col-span-7" : "sm:col-span-5";
+                      const globalIdx = achievements.indexOf(a);
+
+                      return (
+                        <motion.div
+                          key={i}
+                          initial={{ opacity: 0, y: 12 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: i * 0.04, duration: 0.3 }}
+                          className={`${span} col-span-1`}
+                          onMouseEnter={() => setHoveredIdx(globalIdx)}
+                          onMouseLeave={() => setHoveredIdx(null)}
+                        >
+                          <div
+                            className={`relative border transition-all duration-300 overflow-hidden group cursor-default ${
+                              hoveredIdx === globalIdx
+                                ? "border-primary bg-primary/5 scale-[1.01]"
+                                : "border-border hover:border-muted-foreground/30"
+                            } ${isWin ? "p-6 sm:p-8" : "p-4 sm:p-5"}`}
+                          >
+                            {/* Icon as giant watermark */}
+                            <span
+                              className={`absolute select-none pointer-events-none transition-opacity duration-300 ${
+                                hoveredIdx === globalIdx ? "opacity-20" : "opacity-[0.07]"
+                              } ${isWin ? "text-8xl -right-2 -bottom-4" : "text-6xl -right-1 -bottom-2"}`}
+                            >
+                              {a.icon}
+                            </span>
+
+                            <div className="relative z-10">
+                              <div className="flex items-start gap-3">
+                                <span className={`shrink-0 ${isWin ? "text-3xl" : "text-xl"}`}>{a.icon}</span>
+                                <div className="min-w-0">
+                                  <h3 className={`font-bold text-foreground leading-tight ${isWin ? "text-base sm:text-lg" : "text-sm"}`}>
+                                    {a.title}
+                                  </h3>
+                                  <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">{a.description}</p>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Bottom accent line on hover */}
+                            <div
+                              className={`absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-500 ${
+                                hoveredIdx === globalIdx ? "w-full" : "w-0"
+                              }`}
+                            />
+                          </div>
+                        </motion.div>
+                      );
+                    })}
                   </div>
                 </div>
-              </StaggerItem>
+              ))}
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Bottom summary ticker */}
+          <div className="mt-16 border-t border-border pt-6 flex flex-wrap gap-8">
+            {[
+              { label: "1st Places", value: achievements.filter(a => a.icon === '🥇').length },
+              { label: "Dean's List", value: achievements.filter(a => a.title.includes("Dean")).length },
+              { label: "Competitions", value: achievements.filter(a => ['🥇','🥈','🥉','🏅'].includes(a.icon)).length },
+              { label: "Years Active", value: `${Math.min(...years.map(Number))}–${Math.max(...years.map(Number))}` },
+            ].map((s) => (
+              <div key={s.label}>
+                <div className="text-2xl font-bold font-mono text-foreground">{s.value}</div>
+                <div className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider">{s.label}</div>
+              </div>
             ))}
-          </StaggerContainer>
-        </div>
+          </div>
 
-        {/* Dean's Honour List — compact */}
-        <div className="mb-12">
-          <FadeIn>
-            <h2 className="font-mono text-xs text-primary uppercase tracking-widest mb-4">Dean's Honour List</h2>
-          </FadeIn>
-          <FadeIn delay={0.1}>
-            <div className="flex flex-wrap gap-0 border border-border inline-flex">
-              {honors.map((a, i) => (
-                <div key={i} className={`px-4 py-3 ${i < honors.length - 1 ? "border-r border-border" : ""}`}>
-                  <div className="text-lg font-bold font-mono text-foreground">{a.icon}</div>
-                  <div className="text-[10px] font-mono text-muted-foreground mt-1">{a.description.split('·')[1]?.trim()}</div>
-                </div>
-              ))}
-            </div>
-          </FadeIn>
         </div>
-
-        {/* Other */}
-        <div>
-          <FadeIn>
-            <h2 className="font-mono text-xs text-primary uppercase tracking-widest mb-4">Other Recognition</h2>
-          </FadeIn>
-          <StaggerContainer>
-            <div className="border-t border-border">
-              {others.map((a, i) => (
-                <StaggerItem key={i}>
-                  <div className="flex items-start gap-3 py-3 border-b border-border hover:bg-card/30 transition-colors px-2 -mx-2">
-                    <span className="text-lg shrink-0 mt-0.5">{a.icon}</span>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-foreground text-sm">{a.title}</h3>
-                      <p className="text-xs text-muted-foreground mt-0.5">{a.description}</p>
-                    </div>
-                  </div>
-                </StaggerItem>
-              ))}
-            </div>
-          </StaggerContainer>
-        </div>
-      </Section>
+      </div>
     </PageWrapper>
   );
 }
