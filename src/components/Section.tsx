@@ -1,37 +1,27 @@
 import { cn } from "@/lib/utils";
 import { ReactNode } from "react";
 
-interface Props {
-  children: ReactNode;
-  className?: string;
+export function PageWrapper({ children }: { children: ReactNode }) {
+  return (
+    <main className="pt-12 lg:pt-0 lg:pl-14 min-h-screen">
+      {children}
+    </main>
+  );
 }
 
-export function Section({ children, className }: Props) {
+export function Section({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <section className={cn("py-16 sm:py-24", className)}>
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        {children}
-      </div>
+    <section className={cn("py-12 sm:py-20 px-4 sm:px-8 lg:px-12", className)}>
+      <div className="max-w-5xl mx-auto">{children}</div>
     </section>
   );
 }
 
-export function SectionHeader({ title, subtitle, className }: { title: string; subtitle?: string; className?: string }) {
+export function SectionLabel({ children }: { children: string }) {
   return (
-    <div className={cn("mb-12", className)}>
-      <h2 className="text-3xl sm:text-4xl font-bold text-foreground">{title}</h2>
-      {subtitle && (
-        <p className="mt-3 text-lg text-muted-foreground max-w-2xl">{subtitle}</p>
-      )}
-      <div className="mt-4 h-1 w-16 bg-gradient-primary rounded-full" />
+    <div className="flex items-center gap-3 mb-8">
+      <span className="text-[10px] font-mono font-bold text-primary tracking-[0.3em] uppercase">{children}</span>
+      <div className="flex-1 h-px bg-border" />
     </div>
-  );
-}
-
-export function PageWrapper({ children }: Props) {
-  return (
-    <main className="pt-16 min-h-screen">
-      {children}
-    </main>
   );
 }
