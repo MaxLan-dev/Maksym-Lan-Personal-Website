@@ -1,67 +1,60 @@
 import { profile } from "@/data/profile";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/Motion";
-import { Section, SectionHeader, PageWrapper } from "@/components/Section";
-import { Badge } from "@/components/ui/badge";
-import { GraduationCap, Star, Award, Users, BookOpen, Trophy, Calendar } from "lucide-react";
+import { PageWrapper, Section, SectionLabel } from "@/components/Section";
 
 export default function Education() {
   const { education } = profile;
 
   return (
     <PageWrapper>
-      {/* Degree */}
+      {/* Degree hero */}
       <Section>
-        <SectionHeader title="Education" />
+        <SectionLabel>Education</SectionLabel>
         <FadeIn>
-          <div className="glass rounded-2xl p-8 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
-            <div className="relative">
-              <div className="inline-flex items-center gap-2 mb-4">
-                <GraduationCap className="w-6 h-6 text-primary" />
-                <Badge className="bg-primary/10 text-primary border-0 font-medium">
-                  {education.period}
-                </Badge>
-              </div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">{education.degree}</h2>
-              <p className="text-muted-foreground text-lg">{education.school} · {education.location}</p>
-              <div className="mt-6 flex flex-wrap gap-6">
-                <div className="glass rounded-xl px-5 py-3 text-center">
-                  <div className="text-2xl font-bold text-foreground">{education.gpa}</div>
-                  <div className="text-xs text-muted-foreground">GPA</div>
+          <div className="border border-border p-6 sm:p-10 relative">
+            <div className="absolute top-4 right-4 font-mono text-[10px] text-muted-foreground tracking-wider">
+              {education.period}
+            </div>
+
+            <h1 className="text-3xl sm:text-4xl font-bold tracking-tighter text-foreground leading-tight max-w-xl">
+              {education.degree.split('—')[0].trim()}
+            </h1>
+            <p className="text-primary font-serif italic text-xl mt-2">with Distinction</p>
+            <p className="text-sm text-muted-foreground mt-4">{education.school} · {education.location}</p>
+
+            {/* Stats row */}
+            <div className="flex gap-0 border border-border mt-8 inline-flex">
+              {[
+                { label: "GPA", value: education.gpa },
+                { label: "Time", value: "2.5 years" },
+                { label: "Dean's List", value: "5×" },
+              ].map((s, i, arr) => (
+                <div key={s.label} className={`px-5 py-3 ${i < arr.length - 1 ? "border-r border-border" : ""}`}>
+                  <div className="text-xl font-bold font-mono text-foreground">{s.value}</div>
+                  <div className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider">{s.label}</div>
                 </div>
-                <div className="glass rounded-xl px-5 py-3 text-center">
-                  <div className="text-2xl font-bold text-foreground">2.5 yrs</div>
-                  <div className="text-xs text-muted-foreground">Completion</div>
-                </div>
-                <div className="glass rounded-xl px-5 py-3 text-center">
-                  <div className="text-2xl font-bold text-foreground">5×</div>
-                  <div className="text-xs text-muted-foreground">Dean's List</div>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </FadeIn>
       </Section>
 
       {/* Coursework */}
-      <Section className="bg-gradient-subtle">
-        <SectionHeader title="Coursework" subtitle="Key courses across CS, Math, and Statistics" />
-        <StaggerContainer className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <Section className="border-t border-border">
+        <SectionLabel>Coursework</SectionLabel>
+        <StaggerContainer className="space-y-8">
           {Object.entries(education.coursework).map(([category, courses]) => (
             <StaggerItem key={category}>
-              <div className="glass rounded-2xl p-6 h-full">
-                <div className="flex items-center gap-2 mb-4">
-                  <BookOpen className="w-4 h-4 text-primary" />
-                  <h3 className="font-semibold text-foreground">{category}</h3>
-                </div>
-                <ul className="space-y-1.5">
+              <div>
+                <h3 className="font-mono text-xs text-primary uppercase tracking-widest mb-3">{category}</h3>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-1.5">
                   {courses.map((course) => (
-                    <li key={course} className="text-sm text-muted-foreground flex items-start gap-2">
-                      <span className="w-1 h-1 rounded-full bg-primary mt-2 shrink-0" />
+                    <div key={course} className="text-sm text-muted-foreground flex items-start gap-2">
+                      <span className="text-border mt-1.5 shrink-0">·</span>
                       {course}
-                    </li>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
             </StaggerItem>
           ))}
@@ -69,18 +62,15 @@ export default function Education() {
       </Section>
 
       {/* Certifications */}
-      <Section>
-        <SectionHeader title="Certifications" />
+      <Section className="border-t border-border">
+        <SectionLabel>Certifications</SectionLabel>
         <StaggerContainer className="space-y-4">
           {education.certifications.map((cert) => (
             <StaggerItem key={cert.name}>
-              <div className="glass rounded-2xl p-6 flex items-start gap-4">
-                <Award className="w-6 h-6 text-primary shrink-0 mt-0.5" />
-                <div>
-                  <h3 className="font-semibold text-foreground">{cert.name}</h3>
-                  <p className="text-sm text-muted-foreground mt-1">{cert.issuer} · {cert.date}</p>
-                  <p className="text-sm text-muted-foreground mt-2">{cert.description}</p>
-                </div>
+              <div className="border-l-2 border-primary pl-5 py-2">
+                <h3 className="font-semibold text-foreground">{cert.name}</h3>
+                <p className="text-sm text-muted-foreground mt-1">{cert.issuer} · {cert.date}</p>
+                <p className="text-sm text-muted-foreground mt-2">{cert.description}</p>
               </div>
             </StaggerItem>
           ))}
@@ -88,21 +78,22 @@ export default function Education() {
       </Section>
 
       {/* Clubs */}
-      <Section className="bg-gradient-subtle">
-        <SectionHeader title="Clubs & Leadership" />
-        <StaggerContainer className="grid sm:grid-cols-2 gap-4">
-          {education.clubs.map((club) => (
-            <StaggerItem key={club.name}>
-              <div className="glass rounded-2xl p-6 hover:shadow-glow transition-all duration-500">
-                <div className="flex items-center gap-2 mb-2">
-                  <Users className="w-4 h-4 text-primary" />
-                  <Badge variant="secondary" className="text-xs font-mono">{club.period}</Badge>
+      <Section className="border-t border-border">
+        <SectionLabel>Clubs & Leadership</SectionLabel>
+        <StaggerContainer>
+          <div className="border border-border">
+            {education.clubs.map((club, i) => (
+              <StaggerItem key={club.name}>
+                <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-5 py-4 ${i < education.clubs.length - 1 ? "border-b border-border" : ""} hover:bg-card/50 transition-colors`}>
+                  <div>
+                    <h3 className="font-semibold text-foreground text-sm">{club.name}</h3>
+                    <p className="text-primary text-xs font-medium">{club.role}</p>
+                  </div>
+                  <span className="font-mono text-[10px] text-muted-foreground shrink-0">{club.period}</span>
                 </div>
-                <h3 className="font-semibold text-foreground">{club.name}</h3>
-                <p className="text-sm text-primary font-medium mt-1">{club.role}</p>
-              </div>
-            </StaggerItem>
-          ))}
+              </StaggerItem>
+            ))}
+          </div>
         </StaggerContainer>
       </Section>
     </PageWrapper>

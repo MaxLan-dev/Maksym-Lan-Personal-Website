@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Download, Maximize2, Minimize2 } from "lucide-react";
 import { FadeIn } from "@/components/Motion";
-import { PageWrapper } from "@/components/Section";
+import { PageWrapper, Section, SectionLabel } from "@/components/Section";
 import { profile } from "@/data/profile";
 
 export default function Resume() {
@@ -9,35 +9,47 @@ export default function Resume() {
 
   return (
     <PageWrapper>
-      <div className={`${fullScreen ? "fixed inset-0 z-50 bg-background p-4" : "max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-24"}`}>
-        <FadeIn>
-          <div className="flex items-center justify-between mb-6">
-            <h1 className="text-3xl sm:text-4xl font-bold text-foreground">Resume</h1>
-            <div className="flex items-center gap-2">
-              <a
-                href={profile.resumeUrl}
-                download
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition-opacity"
-              >
-                <Download className="w-4 h-4" /> Download
-              </a>
-              <button
-                onClick={() => setFullScreen(!fullScreen)}
-                className="p-2 rounded-xl border border-border text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-                aria-label="Toggle fullscreen"
-              >
-                {fullScreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
-              </button>
+      <div className={fullScreen ? "fixed inset-0 z-50 bg-background p-4 lg:pl-[70px]" : ""}>
+        <Section className={fullScreen ? "py-0 h-full flex flex-col" : ""}>
+          {!fullScreen && <SectionLabel>Resume</SectionLabel>}
+
+          <FadeIn>
+            <div className="flex items-center justify-between mb-4">
+              {!fullScreen && (
+                <h1 className="text-4xl sm:text-5xl font-bold tracking-tighter text-foreground">
+                  <span className="font-serif italic font-normal text-primary">CV</span>
+                </h1>
+              )}
+              <div className="flex items-center gap-0 border border-border ml-auto">
+                <a
+                  href={profile.resumeUrl}
+                  download
+                  className="flex items-center gap-2 px-4 py-2 text-[10px] font-mono uppercase tracking-wider text-foreground hover:bg-primary hover:text-primary-foreground transition-colors border-r border-border"
+                >
+                  <Download className="w-3.5 h-3.5" /> Download
+                </a>
+                <button
+                  onClick={() => setFullScreen(!fullScreen)}
+                  className="flex items-center gap-2 px-4 py-2 text-[10px] font-mono uppercase tracking-wider text-foreground hover:bg-primary hover:text-primary-foreground transition-colors"
+                >
+                  {fullScreen ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
+                  {fullScreen ? "Exit" : "Expand"}
+                </button>
+              </div>
             </div>
-          </div>
-          <div className="glass rounded-2xl overflow-hidden" style={{ height: fullScreen ? "calc(100vh - 100px)" : "80vh" }}>
+          </FadeIn>
+
+          <div
+            className="border border-border overflow-hidden flex-1"
+            style={{ height: fullScreen ? "calc(100% - 60px)" : "75vh" }}
+          >
             <iframe
               src={profile.resumeUrl}
               className="w-full h-full"
               title="Resume"
             />
           </div>
-        </FadeIn>
+        </Section>
       </div>
     </PageWrapper>
   );
