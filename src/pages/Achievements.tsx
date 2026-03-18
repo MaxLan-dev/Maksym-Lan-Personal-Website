@@ -1,15 +1,23 @@
 import { useState } from "react";
-import { achievements } from "@/data/achievements";
+import { achievements, type Achievement } from "@/data/achievements";
 import { motion, AnimatePresence } from "framer-motion";
 import { PageWrapper } from "@/components/Section";
+import { Trophy, Award, Star, Medal, Zap } from "lucide-react";
 
-// Extract year from description
+// Tier config — icon, accent color via tailwind classes
+const tierConfig: Record<Achievement["tier"], { icon: typeof Trophy; label: string; accent: string; bg: string; text: string }> = {
+  gold:   { icon: Trophy, label: "1ST", accent: "border-yellow-500", bg: "bg-yellow-500/10", text: "text-yellow-600 dark:text-yellow-400" },
+  silver: { icon: Award,  label: "2ND", accent: "border-zinc-400", bg: "bg-zinc-400/10", text: "text-zinc-500 dark:text-zinc-300" },
+  bronze: { icon: Medal,  label: "3RD", accent: "border-amber-700", bg: "bg-amber-700/10", text: "text-amber-700 dark:text-amber-500" },
+  honor:  { icon: Star,   label: "HON", accent: "border-primary", bg: "bg-primary/10", text: "text-primary" },
+  merit:  { icon: Zap,    label: "MRT", accent: "border-muted-foreground/40", bg: "bg-muted/50", text: "text-muted-foreground" },
+};
+
 function getYear(desc: string): string {
   const match = desc.match(/(\d{4})/);
   return match ? match[1] : "Other";
 }
 
-// Group by year descending
 function groupByYear() {
   const map = new Map<string, typeof achievements>();
   achievements.forEach((a) => {
@@ -49,14 +57,12 @@ export default function Achievements() {
             </div>
           </div>
 
-          {/* Year selector — horizontal ticker */}
+          {/* Year selector */}
           <div className="flex items-center gap-1 mb-12 overflow-x-auto pb-2">
             <button
               onClick={() => setActiveYear(null)}
               className={`px-4 py-2 font-mono text-xs tracking-wider transition-all shrink-0 ${
-                !activeYear
-                  ? "bg-foreground text-background font-bold"
-                  : "text-muted-foreground hover:text-foreground border border-border"
+                !activeYear ? "bg-foreground text-background font-bold" : "text-muted-foreground hover:text-foreground border border-border"
               }`}
             >
               ALL ({totalCount})
@@ -68,9 +74,7 @@ export default function Achievements() {
                   key={year}
                   onClick={() => setActiveYear(activeYear === year ? null : year)}
                   className={`px-4 py-2 font-mono text-xs tracking-wider transition-all shrink-0 ${
-                    activeYear === year
-                      ? "bg-primary text-primary-foreground font-bold"
-                      : "text-muted-foreground hover:text-foreground border border-border"
+                    activeYear === year ? "bg-primary text-primary-foreground font-bold" : "text-muted-foreground hover:text-foreground border border-border"
                   }`}
                 >
                   {year} ({count})
@@ -79,7 +83,7 @@ export default function Achievements() {
             })}
           </div>
 
-          {/* Achievements — stacked newspaper columns */}
+          {/* Achievements */}
           <AnimatePresence mode="wait">
             <motion.div
               key={activeYear ?? "all"}
@@ -90,20 +94,19 @@ export default function Achievements() {
             >
               {displayed.map(([year, items]) => (
                 <div key={year} className="mb-14">
-                  {/* Year divider */}
                   <div className="flex items-center gap-4 mb-6">
                     <span className="text-5xl sm:text-6xl font-bold font-mono text-foreground/10 select-none">{year}</span>
                     <div className="flex-1 h-px bg-border" />
                     <span className="font-mono text-[10px] text-muted-foreground">{items.length} ITEM{items.length > 1 ? "S" : ""}</span>
                   </div>
 
-                  {/* Masonry-like asymmetric grid */}
                   <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
                     {items.map((a, i) => {
-                      // Alternate sizing for visual interest
-                      const isWin = a.icon === '🥇';
-                      const isMedal = ['🥇', '🥈', '🥉'].includes(a.icon);
-                      const span = isWin ? "sm:col-span-8" : isMedal ? "sm:col-span-6" : i % 3 === 0 ? "sm:col-span-7" : "sm:col-span-5";
+                      const config = tierConfig[a.tier];
+                      const Icon = config.icon;
+                      const isTop = a.tier === "gold";
+                      const isMedal = ["gold", "silver", "bronze"].includes(a.tier);
+                      const span = isTop ? "sm:col-span-8" : isMedal ? "sm:col-span-6" : i % 3 === 0 ? "sm:col-span-7" : "sm:col-span-5";
                       const globalIdx = achievements.indexOf(a);
 
                       return (
@@ -117,26 +120,32 @@ export default function Achievements() {
                           onMouseLeave={() => setHoveredIdx(null)}
                         >
                           <div
-                            className={`relative border transition-all duration-300 overflow-hidden group cursor-default ${
+                            className={`relative border-l-2 border transition-all duration-300 overflow-hidden group cursor-default ${
                               hoveredIdx === globalIdx
-                                ? "border-primary bg-primary/5 scale-[1.01]"
-                                : "border-border hover:border-muted-foreground/30"
-                            } ${isWin ? "p-6 sm:p-8" : "p-4 sm:p-5"}`}
+                                ? `${config.accent} ${config.bg} scale-[1.01]`
+                                : "border-border border-l-border hover:border-muted-foreground/30"
+                            } ${isTop ? "p-6 sm:p-8" : "p-4 sm:p-5"}`}
                           >
-                            {/* Icon as giant watermark */}
-                            <span
-                              className={`absolute select-none pointer-events-none transition-opacity duration-300 ${
-                                hoveredIdx === globalIdx ? "opacity-20" : "opacity-[0.07]"
-                              } ${isWin ? "text-8xl -right-2 -bottom-4" : "text-6xl -right-1 -bottom-2"}`}
-                            >
-                              {a.icon}
-                            </span>
+                            {/* Ghost icon watermark */}
+                            <Icon
+                              className={`absolute pointer-events-none transition-opacity duration-300 ${config.text} ${
+                                hoveredIdx === globalIdx ? "opacity-15" : "opacity-[0.04]"
+                              } ${isTop ? "w-24 h-24 -right-3 -bottom-3" : "w-16 h-16 -right-2 -bottom-2"}`}
+                            />
 
                             <div className="relative z-10">
                               <div className="flex items-start gap-3">
-                                <span className={`shrink-0 ${isWin ? "text-3xl" : "text-xl"}`}>{a.icon}</span>
-                                <div className="min-w-0">
-                                  <h3 className={`font-bold text-foreground leading-tight ${isWin ? "text-base sm:text-lg" : "text-sm"}`}>
+                                {/* Icon badge */}
+                                <div className={`shrink-0 w-8 h-8 flex items-center justify-center border ${config.accent} ${config.bg} transition-colors duration-300`}>
+                                  <Icon className={`w-4 h-4 ${config.text}`} />
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                  <div className="flex items-center gap-2 mb-1">
+                                    <span className={`font-mono text-[9px] font-bold tracking-widest ${config.text}`}>
+                                      {config.label}
+                                    </span>
+                                  </div>
+                                  <h3 className={`font-bold text-foreground leading-tight ${isTop ? "text-base sm:text-lg" : "text-sm"}`}>
                                     {a.title}
                                   </h3>
                                   <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">{a.description}</p>
@@ -144,12 +153,9 @@ export default function Achievements() {
                               </div>
                             </div>
 
-                            {/* Bottom accent line on hover */}
-                            <div
-                              className={`absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-500 ${
-                                hoveredIdx === globalIdx ? "w-full" : "w-0"
-                              }`}
-                            />
+                            <div className={`absolute bottom-0 left-0 h-0.5 transition-all duration-500 ${
+                              hoveredIdx === globalIdx ? `w-full ${config.accent.replace("border-", "bg-")}` : "w-0 bg-transparent"
+                            }`} />
                           </div>
                         </motion.div>
                       );
@@ -160,17 +166,20 @@ export default function Achievements() {
             </motion.div>
           </AnimatePresence>
 
-          {/* Bottom summary ticker */}
+          {/* Bottom summary */}
           <div className="mt-16 border-t border-border pt-6 flex flex-wrap gap-8">
             {[
-              { label: "1st Places", value: achievements.filter(a => a.icon === '🥇').length },
-              { label: "Dean's List", value: achievements.filter(a => a.title.includes("Dean")).length },
-              { label: "Competitions", value: achievements.filter(a => ['🥇','🥈','🥉','🏅'].includes(a.icon)).length },
-              { label: "Years Active", value: `${Math.min(...years.map(Number))}–${Math.max(...years.map(Number))}` },
+              { label: "1st Places", value: achievements.filter(a => a.tier === "gold").length, icon: Trophy },
+              { label: "Dean's List", value: achievements.filter(a => a.title.includes("Dean")).length, icon: Star },
+              { label: "Podium Finishes", value: achievements.filter(a => ["gold","silver","bronze"].includes(a.tier)).length, icon: Medal },
+              { label: "Years Active", value: `${Math.min(...years.map(Number))}–${Math.max(...years.map(Number))}`, icon: Zap },
             ].map((s) => (
-              <div key={s.label}>
-                <div className="text-2xl font-bold font-mono text-foreground">{s.value}</div>
-                <div className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider">{s.label}</div>
+              <div key={s.label} className="flex items-center gap-3">
+                <s.icon className="w-4 h-4 text-muted-foreground" />
+                <div>
+                  <div className="text-xl font-bold font-mono text-foreground">{s.value}</div>
+                  <div className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider">{s.label}</div>
+                </div>
               </div>
             ))}
           </div>
