@@ -1,73 +1,62 @@
 import { experiences } from "@/data/experience";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/Motion";
-import { Section, SectionHeader, PageWrapper } from "@/components/Section";
-import { Badge } from "@/components/ui/badge";
-import { MapPin, Calendar, Building2 } from "lucide-react";
+import { PageWrapper, Section, SectionLabel } from "@/components/Section";
 
 export default function Experience() {
   return (
     <PageWrapper>
       <Section>
-        <SectionHeader title="Professional Experience" subtitle="From astrophysics research to enterprise software and AI startups" />
+        <SectionLabel>Experience</SectionLabel>
+        <FadeIn>
+          <h1 className="text-4xl sm:text-5xl font-bold tracking-tighter text-foreground mb-2">
+            Professional <span className="font-serif italic font-normal text-primary">Journey</span>
+          </h1>
+          <p className="text-sm text-muted-foreground mb-12">From astrophysics research to enterprise AI and startups</p>
+        </FadeIn>
 
-        <div className="relative">
-          {/* Timeline line */}
-          <div className="absolute left-4 lg:left-1/2 lg:-translate-x-px top-0 bottom-0 w-0.5 bg-border hidden sm:block" />
+        <StaggerContainer className="space-y-0">
+          {experiences.map((exp, i) => (
+            <StaggerItem key={`${exp.company}-${exp.period}`}>
+              <div className="relative border-b border-border group">
+                {/* Left timeline accent */}
+                <div className="absolute left-0 top-0 bottom-0 w-px bg-border group-hover:bg-primary transition-colors" />
+                <div className="absolute left-0 top-6 w-2 h-2 -translate-x-[3.5px] border-2 border-border bg-background group-hover:border-primary transition-colors" />
 
-          <StaggerContainer className="space-y-8">
-            {experiences.map((exp, i) => (
-              <StaggerItem key={`${exp.company}-${exp.period}`}>
-                <div className={`relative flex flex-col lg:flex-row gap-6 ${i % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"}`}>
-                  {/* Timeline dot */}
-                  <div className="absolute left-4 lg:left-1/2 lg:-translate-x-1/2 w-3 h-3 rounded-full bg-primary border-4 border-background shadow-glow hidden sm:block" style={{ top: "2rem" }} />
-
-                  {/* Spacer */}
-                  <div className="flex-1 hidden lg:block" />
-
-                  {/* Card */}
-                  <div className="flex-1 sm:pl-12 lg:pl-0">
-                    <div className="glass rounded-2xl p-6 hover:shadow-glow transition-all duration-500 group">
-                      <div className="flex flex-wrap items-start gap-3 mb-3">
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-lg text-foreground group-hover:text-primary transition-colors">
-                            {exp.title}
-                          </h3>
-                          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-sm text-muted-foreground">
-                            <span className="inline-flex items-center gap-1">
-                              <Building2 className="w-3.5 h-3.5" /> {exp.company}
-                            </span>
-                            <span className="inline-flex items-center gap-1">
-                              <MapPin className="w-3.5 h-3.5" /> {exp.location}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium font-mono whitespace-nowrap">
-                          <Calendar className="w-3 h-3" /> {exp.period}
-                        </div>
-                      </div>
-
-                      <div className="space-y-2 mb-4">
-                        {exp.description.map((line, j) => (
-                          <p key={j} className="text-sm text-muted-foreground leading-relaxed pl-4 border-l-2 border-border">
-                            {line}
-                          </p>
-                        ))}
-                      </div>
-
-                      <div className="flex flex-wrap gap-1.5">
-                        {exp.skills.map((skill) => (
-                          <Badge key={skill} variant="secondary" className="text-[10px] font-normal">
-                            {skill}
-                          </Badge>
-                        ))}
+                <div className="pl-8 py-6 hover:bg-card/30 transition-colors">
+                  {/* Header row */}
+                  <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 mb-3">
+                    <div>
+                      <h3 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">
+                        {exp.title}
+                      </h3>
+                      <div className="text-sm text-muted-foreground">
+                        {exp.company} <span className="text-border mx-1">·</span> {exp.location}
                       </div>
                     </div>
+                    <span className="font-mono text-[10px] text-primary tracking-wider shrink-0">{exp.period}</span>
+                  </div>
+
+                  {/* Description */}
+                  <div className="space-y-1.5 mb-3">
+                    {exp.description.map((line, j) => (
+                      <p key={j} className="text-sm text-muted-foreground leading-relaxed flex gap-2">
+                        <span className="text-border shrink-0 mt-0.5">→</span>
+                        <span>{line}</span>
+                      </p>
+                    ))}
+                  </div>
+
+                  {/* Skills */}
+                  <div className="flex flex-wrap gap-x-2 gap-y-1">
+                    {exp.skills.map((skill) => (
+                      <span key={skill} className="text-[10px] font-mono text-muted-foreground">{skill}</span>
+                    ))}
                   </div>
                 </div>
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
-        </div>
+              </div>
+            </StaggerItem>
+          ))}
+        </StaggerContainer>
       </Section>
     </PageWrapper>
   );
