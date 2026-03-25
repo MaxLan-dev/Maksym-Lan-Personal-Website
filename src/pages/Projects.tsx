@@ -10,11 +10,22 @@ export default function Projects() {
   const [filter, setFilter] = useState("");
   const [activeFilter, setActiveFilter] = useState("All");
 
+  const q = filter.trim().toLowerCase();
   const filtered = projects.filter((p) => {
-    const matchesSearch = !filter || p.title.toLowerCase().includes(filter.toLowerCase()) || p.description.toLowerCase().includes(filter.toLowerCase());
+    const haystack = [
+      p.title,
+      p.description,
+      p.period,
+      p.association ?? "",
+      ...p.skills,
+    ]
+      .join(" ")
+      .toLowerCase();
+    const matchesSearch = !q || haystack.includes(q);
     const matchesSkill = activeFilter === "All" || p.skills.includes(activeFilter);
     return matchesSearch && matchesSkill;
   });
+  const hasActiveQuery = Boolean(q) || activeFilter !== "All";
 
   return (
     <PageWrapper>
@@ -24,7 +35,18 @@ export default function Projects() {
         <FadeIn>
           <div className="mb-4">
             <h1 className="text-4xl sm:text-5xl font-bold tracking-tighter text-foreground">
-              {projects.length} <span className="font-serif italic font-normal text-primary">builds</span>
+              {hasActiveQuery ? (
+                <>
+                  {filtered.length}
+                  <span className="font-serif italic font-normal text-primary"> of {projects.length}</span>{" "}
+                  <span className="font-serif italic font-normal text-primary">shown</span>
+                </>
+              ) : (
+                <>
+                  {projects.length}{" "}
+                  <span className="font-serif italic font-normal text-primary">builds</span>
+                </>
+              )}
             </h1>
             <p className="text-sm text-muted-foreground mt-2">AI · Full-stack · Research · Startups</p>
           </div>
@@ -62,10 +84,10 @@ export default function Projects() {
         </FadeIn>
 
         {/* Project list — editorial table style */}
-        <StaggerContainer>
+        <StaggerContainer animateOnMount>
           <div className="border-t border-border">
             {filtered.map((project, i) => (
-              <StaggerItem key={project.title}>
+              <StaggerItem key={`${project.title}-${project.period}`}>
                 <div className="border-b border-border py-5 group hover:bg-card/50 transition-colors px-2 -mx-2">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">

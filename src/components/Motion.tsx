@@ -35,12 +35,22 @@ export function SlideIn({ children, className, delay = 0, direction = "left" }: 
   );
 }
 
-export function StaggerContainer({ children, className }: { children: ReactNode; className?: string }) {
+export function StaggerContainer({
+  children,
+  className,
+  /** Use on long lists or mobile / in-app browsers where scroll-based animation may never run. */
+  animateOnMount = false,
+}: {
+  children: ReactNode;
+  className?: string;
+  animateOnMount?: boolean;
+}) {
   return (
     <motion.div
       initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-30px" }}
+      {...(animateOnMount
+        ? { animate: "visible" }
+        : { whileInView: "visible", viewport: { once: true, margin: "-30px" } })}
       variants={{ visible: { transition: { staggerChildren: 0.06 } } }}
       className={className}
     >

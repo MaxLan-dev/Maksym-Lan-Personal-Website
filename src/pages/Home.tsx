@@ -126,10 +126,9 @@ export default function Home() {
       <Section className="border-t border-border">
         <SectionLabel>Contact</SectionLabel>
         <FadeIn>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               { label: "Location", value: profile.location },
-              { label: "Phone", value: profile.phone, href: `tel:${profile.phone}` },
               { label: "Email", value: profile.email, href: `mailto:${profile.email}` },
               { label: "LinkedIn", value: "/in/maksym-lan", href: profile.linkedin },
             ].map((item) => (

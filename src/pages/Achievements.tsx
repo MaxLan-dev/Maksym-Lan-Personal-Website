@@ -13,29 +13,25 @@ const tierConfig: Record<Achievement["tier"], { icon: typeof Trophy; label: stri
   merit:  { icon: Zap,    label: "MRT", accent: "border-muted-foreground/40", bg: "bg-muted/50", text: "text-muted-foreground" },
 };
 
-function getYear(desc: string): string {
-  const match = desc.match(/(\d{4})/);
-  return match ? match[1] : "Other";
-}
-
 function groupByYear() {
-  const map = new Map<string, typeof achievements>();
+  const map = new Map<number, Achievement[]>();
   achievements.forEach((a) => {
-    const year = getYear(a.description);
-    if (!map.has(year)) map.set(year, []);
-    map.get(year)!.push(a);
+    if (!map.has(a.year)) map.set(a.year, []);
+    map.get(a.year)!.push(a);
   });
-  return [...map.entries()].sort((a, b) => Number(b[0]) - Number(a[0]));
+  return [...map.entries()].sort((a, b) => b[0] - a[0]);
 }
 
 export default function Achievements() {
   const grouped = groupByYear();
   const years = grouped.map(([y]) => y);
-  const [activeYear, setActiveYear] = useState<string | null>(null);
+  const [activeYear, setActiveYear] = useState<number | null>(null);
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
-  const displayed = activeYear ? grouped.filter(([y]) => y === activeYear) : grouped;
+  const displayed = activeYear != null ? grouped.filter(([y]) => y === activeYear) : grouped;
   const totalCount = achievements.length;
+  const yearRange =
+    years.length > 0 ? `${Math.min(...years)}–${Math.max(...years)}` : "—";
 
   return (
     <PageWrapper>
@@ -62,7 +58,7 @@ export default function Achievements() {
             <button
               onClick={() => setActiveYear(null)}
               className={`px-4 py-2 font-mono text-xs tracking-wider transition-all shrink-0 ${
-                !activeYear ? "bg-foreground text-background font-bold" : "text-muted-foreground hover:text-foreground border border-border"
+                activeYear == null ? "bg-foreground text-background font-bold" : "text-muted-foreground hover:text-foreground border border-border"
               }`}
             >
               ALL ({totalCount})
@@ -95,7 +91,7 @@ export default function Achievements() {
               {displayed.map(([year, items]) => (
                 <div key={year} className="mb-14">
                   <div className="flex items-center gap-4 mb-6">
-                    <span className="text-5xl sm:text-6xl font-bold font-mono text-foreground/10 select-none">{year}</span>
+                    <span className="text-5xl sm:text-6xl font-bold font-mono text-foreground/10 select-none">{String(year)}</span>
                     <div className="flex-1 h-px bg-border" />
                     <span className="font-mono text-[10px] text-muted-foreground">{items.length} ITEM{items.length > 1 ? "S" : ""}</span>
                   </div>
@@ -111,7 +107,7 @@ export default function Achievements() {
 
                       return (
                         <motion.div
-                          key={i}
+                          key={`achievement-${globalIdx}`}
                           initial={{ opacity: 0, y: 12 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: i * 0.04, duration: 0.3 }}
@@ -172,7 +168,7 @@ export default function Achievements() {
               { label: "1st Places", value: achievements.filter(a => a.tier === "gold").length, icon: Trophy },
               { label: "Dean's List", value: achievements.filter(a => a.title.includes("Dean")).length, icon: Star },
               { label: "Podium Finishes", value: achievements.filter(a => ["gold","silver","bronze"].includes(a.tier)).length, icon: Medal },
-              { label: "Years Active", value: `${Math.min(...years.map(Number))}–${Math.max(...years.map(Number))}`, icon: Zap },
+              { label: "Years Active", value: yearRange, icon: Zap },
             ].map((s) => (
               <div key={s.label} className="flex items-center gap-3">
                 <s.icon className="w-4 h-4 text-muted-foreground" />

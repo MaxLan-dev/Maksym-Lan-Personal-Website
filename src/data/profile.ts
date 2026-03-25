@@ -3,7 +3,6 @@ export const profile = {
   title: "Software Developer · AI/ML Engineer",
   subtitle: "Computer Science Graduate | Building intelligent systems at the intersection of AI, full-stack development, and research",
   location: "Winnipeg, MB, Canada",
-  phone: "+1 204 509 1227",
   email: "lanmaksym@gmail.com",
   linkedin: "https://www.linkedin.com/in/maksym-lan/",
   github: "https://github.com/MaxLan-dev",
