@@ -1,17 +1,17 @@
 export const profile = {
   name: "Maksym Lan",
-  title: "Software Developer · AI/ML Engineer",
-  subtitle: "Computer Science Graduate | Building intelligent systems at the intersection of AI, full-stack development, and research",
+  title: "Software Developer · CTO at Hrove",
+  subtitle: "Software developer in Winnipeg building RAG systems, multi-tenant enterprise platforms and whole products end to end",
   location: "Winnipeg, MB, Canada",
   email: "lanmaksym@gmail.com",
   linkedin: "https://www.linkedin.com/in/maksym-lan/",
   github: "https://github.com/MaxLan-dev",
-  website: "https://maxlan-dev.github.io",
+  website: "https://maksym-lan-personal-website.vercel.app",
   resumeUrl: "/resume.pdf",
   about: [
-    "I'm Maksym (Max) Lan — a Computer Science graduate from the University of Manitoba with a minor in Mathematics & Statistics, completed with Distinction in just 2.5 years while maintaining a 3.90/4.5 GPA.",
-    "Currently a Software Developer at CGI (formerly Online Business Systems), I build and maintain multi-tenant enterprise applications using .NET, Angular, Vue.js, and Azure. I'm also the Co-founder & CEO of GroupBuy, an AI-powered SaaS platform for bulk food order aggregation.",
-    "My passion lies in Machine Learning and AI — from production RAG systems achieving 99.99% accuracy at Resilient AG, to winning hackathons with AI-driven solutions. I thrive at the intersection of research and engineering, with roots in astrophysics research and computational modeling.",
+    "I'm Maksym (Max) Lan, a Computer Science graduate from the University of Manitoba with a minor in Mathematics & Statistics, finished with Distinction in 2.5 years with a 3.90/4.5 GPA.",
+    "I'm a Software Developer at CGI (formerly Online Business Systems), building multi-tenant enterprise applications with .NET, React, Angular, Vue.js and Azure. I'm also CTO of Hrove and lead the GY Tea e-commerce build.",
+    "Before that I took a RAG platform at Resilient AG from MVP to production, and before that I modelled neutron stars and HII regions as a researcher in Lviv.",
   ],
   stats: [
     { label: "Degree in", value: "2.5 yrs" },
@@ -19,12 +19,21 @@ export const profile = {
     { label: "Dean's List", value: "5×" },
     { label: "Hackathons", value: "8+" },
   ],
+  writing: [
+    {
+      title: "One Developer, 63 Shipped Changes in Two Weeks: How I Build with AI Agents",
+      date: "Nov 2026",
+      blurb:
+        "How Hrove shipped 63 changes across its app, dashboards, sales portal and website with one developer and an AI agent plugged into the database, team chats, phone and browser.",
+      url: "https://www.linkedin.com/pulse/one-developer-63-shipped-changes-two-weeks-how-i-build-maksym-lan-pdedc/",
+    },
+  ],
   skills: {
-    "Languages": ["Python", "JavaScript", "TypeScript", "Java", "C#", "C++", "R", "SQL"],
-    "AI / ML": ["TensorFlow", "Keras", "PyTorch", "LlamaIndex", "LangChain", "Qdrant", "NumPy", "Pandas", "RAG"],
-    "Full Stack": ["React", "Angular", "Vue.js", ".NET / ASP.NET Core", "Django", "Node.js", "Tailwind CSS", "Redux"],
-    "Cloud & DevOps": ["Azure", "Azure DevOps", "Azure Data Factory", "Docker", "CI/CD", "ETL", "Microservices", "Supabase", "Netlify"],
-    "Tools & Methods": ["Git", "Linux", "LaTeX", "Agile/Scrum", "Software Architecture", "System Optimization"],
+    "Languages": ["Python", "TypeScript", "JavaScript", "C#", "Java", "SQL", "C++", "R"],
+    "AI / ML": ["RAG", "LlamaIndex", "LangChain", "Qdrant", "PyTorch", "TensorFlow", "Keras", "NumPy", "Pandas"],
+    "Web & Mobile": ["React", "React Native", "Expo", "Next.js", "Angular", "Vue.js", ".NET / ASP.NET Core", "Django", "FastAPI", "Flask", "Tailwind CSS"],
+    "Cloud & Data": ["Azure", "Azure DevOps", "Azure Data Factory", "Supabase", "PostgreSQL", "SQL Server", "Docker", "Vercel", "Netlify", "Fly.io"],
+    "Tools & Methods": ["Git", "Linux", "LaTeX", "Agile / Scrum", "CI/CD", "Microservices", "Software Architecture"],
   },
   education: {
     degree: "Bachelor of Computer Science, Minor in Mathematics & Statistics — with Distinction",
@@ -69,20 +78,26 @@ export const profile = {
       {
         name: "Certified ScrumMaster (CSM)",
         issuer: "Scrum Alliance",
-        date: "Nov 2025",
-        description: "Certified in Scrum framework facilitation, agile coaching, and sprint management.",
+        date: "Oct 2025 – Oct 2027",
+        description: "Scrum framework, running Scrum events and coaching agile teams.",
+      },
+      {
+        name: "Legacy JavaScript Algorithms and Data Structures",
+        issuer: "freeCodeCamp",
+        date: "Dec 2022",
+        description: "JavaScript fundamentals, algorithms and data structures.",
       },
     ],
     clubs: [
       {
         name: "University of Manitoba Artificial Intelligence Club",
         role: "Vice President",
-        period: "May 2024 – Aug 2025",
+        period: "May 2024 – Sep 2025",
       },
       {
         name: "University of Manitoba Programming Projects Club",
         role: "Co-founder & Vice President",
-        period: "Nov 2023 – Aug 2025",
+        period: "Nov 2023 – Sep 2025",
       },
       {
         name: ".devClub",

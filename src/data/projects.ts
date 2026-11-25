@@ -9,8 +9,61 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    title: 'Hrove',
+    description: 'One app for frontline and shift-based teams: schedules, daily tasks for each site, safety instructions and messages from their lead, plus team readiness so leads can spot tired teams early. Personal health data stays on the worker’s phone and employers only see team totals. Keeps working when the cloud goes down.',
+    period: 'Jan 2026 – Present',
+    association: 'CTO',
+    skills: ['React Native', 'Expo', 'TypeScript', 'Supabase', 'HealthKit', 'Health Connect'],
+    link: 'https://hrove.ca/'
+  },
+  {
+    title: 'AgentGit',
+    description: 'A voice agent as a git repo. An AI composer makes one commit per request, and any commit can be called, evaluated or reverted, so changes to the agent are reviewable like code.',
+    period: '2026',
+    association: 'Cresta',
+    skills: ['Python', 'FastAPI', 'React', 'Fly.io', 'Voice AI', 'AI'],
+    link: '#'
+  },
+  {
+    title: 'GY Tea',
+    description: 'E-commerce platform for a family-run Winnipeg tea business: catalog, guest checkout, Square payments, local pickup, reviews, blog, newsletter and an admin dashboard.',
+    period: 'Sep 2025 – Present',
+    association: 'Live store',
+    skills: ['React', 'TypeScript', 'Supabase', 'Square', 'Netlify Functions', 'Tailwind CSS'],
+    link: 'https://gytea.ca/'
+  },
+  {
+    title: 'ZoneSmart',
+    description: 'Turns municipal zoning bylaws scattered across PDFs and websites into a searchable, comparable national dataset, with a RAG assistant on top for housing and land-use research.',
+    period: '2026',
+    skills: ['Flask', 'React', 'TypeScript', 'Qdrant', 'Groq', 'Python', 'AI'],
+    link: 'https://github.com/MaxLan-dev/zoning-app'
+  },
+  {
+    title: 'TriageFlow',
+    description: 'Emergency-department workflow prototype with fictional data: structured nurse intake, AI-drafted clinician summaries, a separate deterministic CTAS rules engine and a live physician queue. The nurse always makes the final call.',
+    period: '2026',
+    association: 'Prototype',
+    skills: ['React', 'TanStack Start', 'Supabase', 'Groq', 'Zod', 'AI'],
+    link: '#'
+  },
+  {
+    title: 'Velocistock',
+    description: 'Website for a Winnipeg B2B service that helps businesses recover value from surplus inventory.',
+    period: '2026',
+    skills: ['Next.js', 'TypeScript', 'React'],
+    link: 'https://velocistock.vercel.app'
+  },
+  {
+    title: 'Outreach Agent',
+    description: 'Self-serve outreach agent: set a goal, run lead discovery, review AI-drafted emails and approve each send. Handles replies and follow-up nudges through durable workflows.',
+    period: '2026',
+    skills: ['Next.js', 'TypeScript', 'Mastra', 'Neon Postgres', 'Exa', 'Fly.io', 'AI'],
+    link: 'https://github.com/MaxLan-dev/agents-stuff'
+  },
+  {
     title: 'Eco-Pulse (GenAI Genesis)',
-    description: 'An AI-powered urban heat mitigation and tree-planting planner for Montreal. Users explore ML-derived priority zones on a map and request AI-generated intervention blueprints with recommended planting sites, estimated tree counts, and cost/benefit estimates.',
+    description: 'Urban heat mitigation and tree-planting planner for Montreal. It maps ML-derived priority zones and generates intervention blueprints with planting sites, tree counts and cost/benefit estimates. 1st place in the virtual track.',
     period: '2026',
     association: 'GenAI Genesis',
     skills: ['React', 'TypeScript', 'FastAPI', 'Python', 'Gemini', 'Leaflet', 'Tailwind CSS', 'AI', 'Data Visualization'],
@@ -34,7 +87,7 @@ export const projects: Project[] = [
   },
   {
     title: 'Mail Maestro',
-    description: 'AI-powered email management that categorizes emails, generates summaries, extracts key points, detects sentiment, and suggests responses using Gemini.',
+    description: 'Email assistant that categorizes mail, writes summaries, extracts key points, detects sentiment and suggests replies with Gemini.',
     period: '2026',
     association: 'Lovable / Gemini 2.0 Flash',
     skills: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'Gemini', 'AI', 'UX/UI'],
@@ -42,11 +95,19 @@ export const projects: Project[] = [
   },
   {
     title: 'Project JP',
-    description: 'A comprehensive AI chatbot for a large SaaS provider, integrating Azure AI Services with a .NET backend. Features real-time messaging, data collection tools, analytics, and Docker deployment.',
+    description: 'AI chatbot for a large SaaS provider: Azure AI Services on a .NET backend with real-time messaging, data collection tools, analytics and Docker deployment.',
     period: 'May 2025 – Aug 2025',
     association: 'University of Manitoba',
     skills: ['C#', '.NET', 'ASP.NET Core', 'Azure AI', 'Azure OpenAI', 'Docker', 'API Development'],
     link: '#'
+  },
+  {
+    title: 'Email Helper',
+    description: 'Email productivity tool built with the NullTerminators team. 1st place at the Boosting Canadian Productivity Hackathon.',
+    period: '2025',
+    association: 'Hackathon win',
+    skills: ['AI', 'Productivity'],
+    link: 'https://github.com/MaxLan-dev/Email-Helper'
   },
   {
     title: 'Winnipeg Transit Improvements Map',
@@ -82,10 +143,10 @@ export const projects: Project[] = [
   },
   {
     title: 'Personal Website',
-    description: 'This portfolio website — built with React, TypeScript, and Tailwind CSS.',
+    description: 'This site.',
     period: 'Jul 2024 – Present',
     skills: ['React', 'TypeScript', 'Tailwind CSS', 'Vite'],
-    link: 'https://github.com/MaxLan-dev/MaxLan-dev.github.io'
+    link: 'https://github.com/MaxLan-dev/Maksym-Lan-Personal-Website'
   },
   {
     title: 'Discord GPTBot',
@@ -127,7 +188,7 @@ export const projects: Project[] = [
   },
   {
     title: 'Startup SorbMax',
-    description: 'Led a B2B startup developing innovative biodegradable filters for industrial applications.',
+    description: 'B2B startup developing biodegradable filters for industrial applications.',
     period: 'Jan – Dec 2019',
     skills: ['Project Management', 'Leadership', 'Public Speaking'],
     link: '#'
@@ -142,7 +203,7 @@ export const projects: Project[] = [
   },
   {
     title: 'Morphological Classification of Galaxies',
-    description: 'Image analysis on Galaxy Zoom datasets to create a morphological distribution of galaxy structures.',
+    description: 'Image analysis on Galaxy Zoo datasets to create a morphological distribution of galaxy structures.',
     period: 'Sep 2017 – Mar 2018',
     association: 'Junior Academy of Sciences',
     skills: ['Astrophysics', 'Research', 'Data Analysis', 'LaTeX'],

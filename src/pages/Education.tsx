@@ -12,26 +12,26 @@ export default function Education() {
         <SectionLabel>Education</SectionLabel>
         <FadeIn>
           <div className="border border-border p-6 sm:p-10 relative">
-            <div className="absolute top-4 right-4 font-mono text-[10px] text-muted-foreground tracking-wider">
+            <div className="absolute top-4 right-4 font-mono text-xs text-muted-foreground">
               {education.period}
             </div>
 
-            <h1 className="text-3xl sm:text-4xl font-bold tracking-tighter text-foreground leading-tight max-w-xl">
+            <h1 className="text-3xl sm:text-4xl text-foreground leading-tight max-w-xl">
               {education.degree.split('—')[0].trim()}
             </h1>
-            <p className="text-primary font-serif italic text-xl mt-2">with Distinction</p>
+            <p className="text-primary text-lg mt-2">with Distinction</p>
             <p className="text-sm text-muted-foreground mt-4">{education.school} · {education.location}</p>
 
             {/* Stats row */}
-            <div className="flex gap-0 border border-border mt-8 inline-flex">
+            <div className="border border-border mt-8 inline-flex">
               {[
                 { label: "GPA", value: education.gpa },
                 { label: "Time", value: "2.5 years" },
                 { label: "Dean's List", value: "5×" },
               ].map((s, i, arr) => (
                 <div key={s.label} className={`px-5 py-3 ${i < arr.length - 1 ? "border-r border-border" : ""}`}>
-                  <div className="text-xl font-bold font-mono text-foreground">{s.value}</div>
-                  <div className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider">{s.label}</div>
+                  <div className="text-xl font-medium font-mono tabular-nums text-foreground">{s.value}</div>
+                  <div className="text-xs text-muted-foreground mt-1">{s.label}</div>
                 </div>
               ))}
             </div>
@@ -46,11 +46,11 @@ export default function Education() {
           {Object.entries(education.coursework).map(([category, courses]) => (
             <StaggerItem key={category}>
               <div>
-                <h3 className="font-mono text-xs text-primary uppercase tracking-widest mb-3">{category}</h3>
+                <h3 className="text-sm font-medium text-foreground mb-3">{category}</h3>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-1.5">
                   {courses.map((course) => (
                     <div key={course} className="text-sm text-muted-foreground flex items-start gap-2">
-                      <span className="text-border mt-1.5 shrink-0">·</span>
+                      <span className="text-muted-foreground/60 shrink-0">·</span>
                       {course}
                     </div>
                   ))}
@@ -68,7 +68,7 @@ export default function Education() {
           {education.certifications.map((cert) => (
             <StaggerItem key={cert.name}>
               <div className="border-l-2 border-primary pl-5 py-2">
-                <h3 className="font-semibold text-foreground">{cert.name}</h3>
+                <h3 className="font-medium text-foreground">{cert.name}</h3>
                 <p className="text-sm text-muted-foreground mt-1">{cert.issuer} · {cert.date}</p>
                 <p className="text-sm text-muted-foreground mt-2">{cert.description}</p>
               </div>
@@ -79,17 +79,17 @@ export default function Education() {
 
       {/* Clubs */}
       <Section className="border-t border-border">
-        <SectionLabel>Clubs & Leadership</SectionLabel>
+        <SectionLabel>Clubs and leadership</SectionLabel>
         <StaggerContainer>
           <div className="border border-border">
             {education.clubs.map((club, i) => (
               <StaggerItem key={club.name}>
-                <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-5 py-4 ${i < education.clubs.length - 1 ? "border-b border-border" : ""} hover:bg-card/50 transition-colors`}>
+                <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-5 py-4 ${i < education.clubs.length - 1 ? "border-b border-border" : ""}`}>
                   <div>
-                    <h3 className="font-semibold text-foreground text-sm">{club.name}</h3>
-                    <p className="text-primary text-xs font-medium">{club.role}</p>
+                    <h3 className="font-medium text-foreground text-sm">{club.name}</h3>
+                    <p className="text-muted-foreground text-sm">{club.role}</p>
                   </div>
-                  <span className="font-mono text-[10px] text-muted-foreground shrink-0">{club.period}</span>
+                  <span className="font-mono text-xs text-muted-foreground shrink-0">{club.period}</span>
                 </div>
               </StaggerItem>
             ))}

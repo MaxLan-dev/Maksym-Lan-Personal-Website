@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ExternalLink, Github, Search } from "lucide-react";
 import { projects } from "@/data/projects";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/Motion";
-import { PageWrapper, Section, SectionLabel } from "@/components/Section";
+import { PageWrapper, Section } from "@/components/Section";
 
 const quickFilters = ["All", "React", "Python", "AI", "Django", "TypeScript", ".NET", "C++"];
 
@@ -30,25 +30,12 @@ export default function Projects() {
   return (
     <PageWrapper>
       <Section>
-        <SectionLabel>Projects</SectionLabel>
-
         <FadeIn>
           <div className="mb-4">
-            <h1 className="text-4xl sm:text-5xl font-bold tracking-tighter text-foreground">
-              {hasActiveQuery ? (
-                <>
-                  {filtered.length}
-                  <span className="font-serif italic font-normal text-primary"> of {projects.length}</span>{" "}
-                  <span className="font-serif italic font-normal text-primary">shown</span>
-                </>
-              ) : (
-                <>
-                  {projects.length}{" "}
-                  <span className="font-serif italic font-normal text-primary">builds</span>
-                </>
-              )}
-            </h1>
-            <p className="text-sm text-muted-foreground mt-2">AI · Full-stack · Research · Startups</p>
+            <h1 className="text-4xl sm:text-5xl text-foreground">Projects</h1>
+            <p className="text-sm text-muted-foreground mt-2">
+              {hasActiveQuery ? `${filtered.length} of ${projects.length} shown` : `${projects.length} projects`} · AI, full-stack, research and startups
+            </p>
           </div>
         </FadeIn>
 
@@ -56,10 +43,10 @@ export default function Projects() {
         <FadeIn delay={0.1}>
           <div className="flex flex-col sm:flex-row gap-3 mb-10">
             <div className="relative flex-1 max-w-xs">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" strokeWidth={1.5} />
               <input
                 type="text"
-                placeholder="Search..."
+                placeholder="Search" aria-label="Search projects"
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
                 className="w-full pl-9 pr-3 py-2 text-sm font-mono bg-card border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
@@ -70,7 +57,7 @@ export default function Projects() {
                 <button
                   key={f}
                   onClick={() => setActiveFilter(activeFilter === f ? "All" : f)}
-                  className={`px-3 py-2 text-[10px] font-mono uppercase tracking-wider border-r border-border last:border-r-0 transition-colors ${
+                  className={`px-3 py-2 text-xs font-mono border-r border-border last:border-r-0 transition-colors ${
                     activeFilter === f
                       ? "bg-primary text-primary-foreground"
                       : "text-muted-foreground hover:text-foreground hover:bg-card"
@@ -92,25 +79,25 @@ export default function Projects() {
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-3 mb-1">
-                        <span className="font-mono text-[10px] text-muted-foreground w-6">{String(i + 1).padStart(2, '0')}</span>
-                        <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors truncate">
+                        <span className="font-mono text-xs text-muted-foreground tabular-nums w-6">{String(i + 1).padStart(2, '0')}</span>
+                        <h3 className="font-medium text-foreground truncate">
                           {project.title}
                         </h3>
                         {project.association && (
-                          <span className="hidden sm:inline text-[10px] font-mono text-primary border border-primary px-2 py-0.5 shrink-0">
+                          <span className="hidden sm:inline text-xs font-mono text-muted-foreground border border-border px-2 py-0.5 shrink-0">
                             {project.association}
                           </span>
                         )}
                       </div>
                       <p className="text-sm text-muted-foreground ml-9 line-clamp-2">{project.description}</p>
                       <div className="flex items-center gap-2 mt-2 ml-9 flex-wrap">
-                        <span className="font-mono text-[10px] text-muted-foreground">{project.period}</span>
+                        <span className="font-mono text-xs text-muted-foreground">{project.period}</span>
                         <span className="text-border">|</span>
                         {project.skills.slice(0, 4).map((skill) => (
-                          <span key={skill} className="text-[10px] font-mono text-muted-foreground">{skill}</span>
+                          <span key={skill} className="text-xs font-mono text-muted-foreground">{skill}</span>
                         ))}
                         {project.skills.length > 4 && (
-                          <span className="text-[10px] font-mono text-muted-foreground">+{project.skills.length - 4}</span>
+                          <span className="text-xs font-mono text-muted-foreground">+{project.skills.length - 4}</span>
                         )}
                       </div>
                     </div>
@@ -119,9 +106,10 @@ export default function Projects() {
                         href={project.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-8 h-8 border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary transition-colors shrink-0 mt-1"
+                        aria-label={`Open ${project.title}`}
+                        className="w-8 h-8 border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/40 transition-colors shrink-0 mt-1"
                       >
-                        {project.link.includes("github") ? <Github className="w-3.5 h-3.5" /> : <ExternalLink className="w-3.5 h-3.5" />}
+                        {project.link.includes("github") ? <Github className="w-4 h-4" strokeWidth={1.5} /> : <ExternalLink className="w-4 h-4" strokeWidth={1.5} />}
                       </a>
                     )}
                   </div>
@@ -133,7 +121,7 @@ export default function Projects() {
 
         {filtered.length === 0 && (
           <div className="py-16 text-center font-mono text-sm text-muted-foreground">
-            No matches found.
+            No matching projects
           </div>
         )}
       </Section>

@@ -28,7 +28,7 @@ export function Section({
 export function SectionLabel({ children }: { children: string }) {
   return (
     <div className="flex items-center gap-3 mb-8">
-      <span className="text-[10px] font-mono font-bold text-primary tracking-[0.3em] uppercase">{children}</span>
+      <span className="text-xs font-mono text-muted-foreground">{children}</span>
       <div className="flex-1 h-px bg-border" />
     </div>
   );
